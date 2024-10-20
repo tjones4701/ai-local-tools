@@ -19,14 +19,24 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:linux": "electron-vite build && electron-builder --linux",
+    "typeorm:generate": "npx typeorm-ts-node-esm migration:generate -d src/main/data/datasource.ts",
+    "typeorm:migrate": "npx typeorm-ts-node-esm migration:run -d src/main/data/datasource.ts",
+    "typeorm:revert": "npx typeorm-ts-node-esm migration:revert -d src/main/data/datasource.ts",
+    "typeorm:drop": "npx typeorm-ts-node-esm schema:drop -d src/main/data/datasource.ts"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "@fluentui/react-components": "^9.55.1",
     "openai": "^4.67.3",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^6.27.0",
+    "react-use": "^17.5.1",
+    "reflect-metadata": "^0.2.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

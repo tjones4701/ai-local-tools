@@ -1,4 +1,5 @@
 import { dataEvents } from './events/data';
+import { notificationEvents } from './events/notifications';
 import { openaiEvents } from './events/openai';
 import { randomEvents } from './events/random';
 
@@ -18,7 +19,8 @@ export type EventResponse = EventPayload & {
 const events = {
   ...dataEvents,
   ...randomEvents,
-  ...openaiEvents
+  ...openaiEvents,
+  ...notificationEvents
 };
 
 export async function handleEvent(eventPayload: EventPayload) {

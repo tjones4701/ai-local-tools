@@ -17,7 +17,7 @@ export async function createChatCompletion(
   if (!Array.isArray(prompt)) {
     prompt = [prompt];
   }
-  const model = 'gpt-4o';
+  const model = 'gpt-4o-mini';
 
   const openai = await getOpenAiClient();
   try {

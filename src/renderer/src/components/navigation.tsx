@@ -11,6 +11,7 @@ import {
 } from '@fluentui/react-components';
 import { MoreHorizontal24Filled } from '@fluentui/react-icons';
 import { appRoutes } from '@renderer/app-router';
+import { NotificationsMenu } from '@renderer/components/notifications';
 import { useData } from '@renderer/hooks/save-data';
 import * as React from 'react';
 
@@ -76,6 +77,7 @@ export const Navigation: React.FC = (props: Partial<ToolbarProps>) => {
         </MenuPopover>
       </Menu>
       <PreferencesMenu />
+      <NotificationsMenu />
     </Toolbar>
   );
 };
