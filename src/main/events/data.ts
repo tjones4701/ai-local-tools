@@ -2,37 +2,50 @@ import { app } from 'electron';
 import { EventHandler } from '../event';
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { createEntity } from '../data/datasource';
-import { Notification } from '../data/entities/notifications.entity';
 
 export const dataEvents: Record<string, EventHandler> = {};
 
-const getDataFilePath = (fileName: string) => {
+export const getDataFilePath = (fileName: string) => {
   const userDataPath = app.getPath('userData');
-  return path.join(userDataPath, `${fileName}.json`);
+  return path.join(userDataPath, `${fileName}`);
 };
 
-dataEvents.saveData = async (key: string, data: any) => {
-  const filePath = getDataFilePath(key);
-  console.log(filePath);
-  await fs.writeFile(filePath, JSON.stringify(data));
-  const notification = await createEntity(Notification, {
-    title: 'Data Saved',
-    message: `Data saved to ${filePath}`
-  });
+async function makeSureDirectoryExists(filePath: string) {
+  if (path.extname(filePath)) {
+    filePath = path.dirname(filePath);
+  }
+  await fs.mkdir(filePath, { recursive: true });
+}
 
-  console.log(notification);
-};
+export async function saveData(key: string, data: any) {
+  let filePath = getDataFilePath(key);
+  let dataString: string = data;
+  // If data is an object
+  if (typeof data === 'object') {
+    let fileExtension = path.extname(filePath);
+    if (fileExtension == '') {
+      filePath = `${filePath}.json`;
+    }
+    dataString = JSON.stringify(data);
+  }
+  await makeSureDirectoryExists(filePath);
+  await fs.writeFile(filePath, data);
+  return filePath;
+}
 
 export async function getData<T>(fileName: string, defaultValue: T): Promise<T> {
   const filePath = getDataFilePath(fileName);
   try {
     const fileData = await fs.readFile(filePath, 'utf-8');
-    return JSON.parse(fileData) ?? defaultValue;
+    if (fileName.endsWith('.json')) {
+      return JSON.parse(fileData) ?? defaultValue;
+    } else {
+      return (fileData as unknown as T) ?? defaultValue;
+    }
   } catch (error) {
     return defaultValue;
   }
 }
-dataEvents.getData = async (fileName: string, defaultValue: any) => {
-  return getData(fileName, defaultValue);
-};
+
+dataEvents.getData = getData;
+dataEvents.saveData = saveData;

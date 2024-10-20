@@ -1,9 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from './base.entity';
 @Entity()
 export class Notification extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
   @Column('text')
   title!: string;
 
@@ -12,10 +10,4 @@ export class Notification extends BaseEntity {
 
   @Column('boolean', { default: false })
   read!: boolean;
-
-  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
-  createdAt!: Date;
-
-  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt!: Date;
 }

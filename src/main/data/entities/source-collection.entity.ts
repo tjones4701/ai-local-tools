@@ -1,37 +1,20 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 @Entity()
-export class SourceCollection {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ type: 'boolean', default: true })
-  active!: boolean;
-
-  @CreateDateColumn()
-  created_at!: Date;
-
-  @UpdateDateColumn()
-  modified_at!: Date;
-
-  @Column({ type: 'int' })
-  created_by!: number;
-
-  @Column({ type: 'int' })
-  modified_by!: number;
-
+export class SourceCollection extends BaseEntity {
   @Column({ type: 'text' })
   name!: string;
 
-  @Column({ type: 'text' })
-  location!: string;
-
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   description!: string;
+
+  @Column({ type: 'simple-json', nullable: true })
+  metadata!: string;
+
+  public setMetadata(data: any) {
+    this.metadata = JSON.stringify(data);
+  }
+
+  getFilePath() {}
 }

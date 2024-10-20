@@ -1,4 +1,5 @@
 import { dataEvents } from './events/data';
+import { knowledgeEvents } from './events/knowledge';
 import { notificationEvents } from './events/notifications';
 import { openaiEvents } from './events/openai';
 import { randomEvents } from './events/random';
@@ -20,7 +21,8 @@ const events = {
   ...dataEvents,
   ...randomEvents,
   ...openaiEvents,
-  ...notificationEvents
+  ...notificationEvents,
+  ...knowledgeEvents
 };
 
 export async function handleEvent(eventPayload: EventPayload) {

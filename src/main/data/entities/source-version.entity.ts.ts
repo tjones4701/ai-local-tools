@@ -1,33 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Source } from './source.entity';
 
+import { BaseEntity } from './base.entity';
+
 @Entity()
-export class SourceVersion {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ type: 'boolean', default: true })
-  active!: boolean;
-
-  @CreateDateColumn()
-  created_at!: Date;
-
-  @UpdateDateColumn()
-  modified_at!: Date;
-
-  @Column({ type: 'int' })
-  created_by!: number;
-
-  @Column({ type: 'int' })
-  modified_by!: number;
-
+export class SourceVersion extends BaseEntity {
   @ManyToOne(() => Source, (source) => source.id)
   source_id!: number;
 
