@@ -7,8 +7,15 @@ export const dataEvents: Record<string, EventHandler> = {};
 
 export const getDataFilePath = (fileName: string) => {
   const userDataPath = app.getPath('userData');
+  if (fileName.startsWith(userDataPath)) {
+    return fileName;
+  }
   return path.join(userDataPath, `${fileName}`);
 };
+
+export function getFiles(folderPath: string) {
+  return fs.readdir(getDataFilePath(folderPath));
+}
 
 async function makeSureDirectoryExists(filePath: string) {
   if (path.extname(filePath)) {

@@ -8,10 +8,10 @@ export class BaseEntity {
   @Column({ type: 'boolean', default: true })
   active!: boolean;
 
-  @CreateDateColumn({ default: 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'datetime', default: 'CURRENT_TIMESTAMP' })
   created_at!: Date;
 
-  @CreateDateColumn({ default: 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'datetime', default: 'CURRENT_TIMESTAMP' })
   modified_at!: Date;
 
   @Column({ type: 'int', nullable: true })

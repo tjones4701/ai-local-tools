@@ -1,4 +1,3 @@
-import { NodeHtmlMarkdown } from 'node-html-markdown';
 import { pdfConverter } from './pdf.converter';
 import { textConverter } from './text.converter';
 import { wordConverter } from './word.converter';
@@ -23,14 +22,4 @@ export async function convertFile(filePath: string): Promise<string> {
     throw new Error('No converter found for ' + extension);
   }
   return await converter(filePath);
-}
-
-export async function toMarkdown(content: string): Promise<string> {
-  const lines = content.split('\n').slice(0, 5);
-  console.log(lines.join('\n'));
-  if (lines.some((line) => line.startsWith('<html>'))) {
-    return content;
-  }
-
-  return NodeHtmlMarkdown.translate(content);
 }

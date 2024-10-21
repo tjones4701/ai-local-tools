@@ -1,5 +1,6 @@
 import { BaseEntity, DataSource } from 'typeorm';
 import { entities } from './entities';
+import { SnakeNamingStrategy } from './snack-naming.strategy';
 import { getDatabaseConfiguration, openDatabase } from './sqlite';
 
 let AppDataSource: DataSource | null = null;
@@ -8,6 +9,7 @@ const datasourceConfiguration = {
   type: 'sqlite',
   database: getDatabaseConfiguration().filename,
   synchronize: true,
+  namingStrategy: new SnakeNamingStrategy(),
   entities: [...entities]
 };
 

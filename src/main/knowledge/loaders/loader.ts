@@ -1,10 +1,11 @@
-import { SourceCollection } from '../../data/entities/source-collection.entity';
 import { Source } from '../../data/entities/source.entity';
 
 export class Loader<T = undefined> {
-  parent?: SourceCollection | null;
+  parent?: Source | null;
 
-  constructor() {}
+  constructor(source: Source) {
+    this.parent = source;
+  }
 
   public async initialise(): Promise<void> {}
 
@@ -13,8 +14,7 @@ export class Loader<T = undefined> {
   }
 
   public async loadFromSource(source: Source): Promise<Source> {
-    this.parent = await source.getSourceCollection();
-    console.log(this.parent);
+    this.parent = source;
     return this.load(source.metadata as any);
   }
 }

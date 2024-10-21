@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { Source } from './source.entity';
 
 @Entity()
 export class SourceCollection extends BaseEntity {
@@ -15,6 +16,9 @@ export class SourceCollection extends BaseEntity {
   public setMetadata(data: any) {
     this.metadata = JSON.stringify(data);
   }
+
+  @OneToMany(() => Source, (source) => source.source_collection)
+  sources!: Source[];
 
   getFilePath() {}
 }
