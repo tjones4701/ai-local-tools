@@ -79,5 +79,8 @@ export const rpc = {
   },
   createTextToSpeech: async (text: string, voice: string) => {
     return await rpcGeneric('createTextToSpeech', text, voice);
+  },
+  createNodeLlamaCppChatCompletion: async (messages: any) => {
+    return await rpcGeneric('createNodeLlamaCppChatCompletion', messages);
   }
 };

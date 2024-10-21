@@ -6,7 +6,7 @@ export const HomeScreen: React.FC = () => {
   const [answer, setAnswer] = useState('');
   const askQuestion = async (text: string) => {
     setQuestion(text);
-    const response: any = await rpc.createChatCompletion({
+    const response: any = await rpc.createNodeLlamaCppChatCompletion({
       role: 'assistant',
       content: text
     });
