@@ -4,6 +4,7 @@ import { HomeScreen } from './pages/home/home.screen';
 import { Navigation } from './components/navigation';
 import { makeStyles } from '@fluentui/react-components';
 import { SettingsScreen } from './pages/settings/settings.screen';
+import SourceCollectionsScreen from './pages/source-collections/source-collections.screen';
 
 const useStyles = makeStyles({
   root: {
@@ -35,6 +36,11 @@ export const appRoutes = [
     label: 'Settings',
     href: '/settings',
     element: SettingsScreen
+  },
+  {
+    label: 'Source Collections',
+    href: '/source-collections',
+    element: SourceCollectionsScreen
   }
 ];
 
