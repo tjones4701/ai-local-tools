@@ -23,6 +23,13 @@ async function getTestFileSource(collection: SourceCollection) {
   ).findOne({
     where: { id: 53 }
   })) as any;
+  if (latestSource == null) {
+    const source = new Source<{ filePath: string }>();
+    source.metadata = { filePath: 'C:/temp/base' };
+    source.source_type = 'FILE';
+    source.source_collection = collection;
+    source.source_collection_id = collection.id;
+  }
   if (latestSource.source_collection_id != collection.id) {
     latestSource.source_collection_id = collection.id;
     await saveEntity(latestSource);

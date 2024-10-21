@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 
-interface AsyncState<T> {
+export type AsyncState<T> = {
   error: Error | null;
   loading: boolean;
   value: T | null;
-}
+};
 
 export function useAsync<T>(
   asyncFunction: () => Promise<T>,

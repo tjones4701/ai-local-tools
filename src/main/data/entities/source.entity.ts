@@ -43,6 +43,8 @@ export class Source<T = undefined> extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   tags!: string; // Changed from simple-array to text
 
+  source_collection_id!: number;
+
   public async process() {
     if (this.id == null) {
       throw new Error('Source must be saved before processing');

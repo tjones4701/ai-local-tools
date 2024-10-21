@@ -78,6 +78,9 @@ export const Navigation: React.FC = (props: Partial<ToolbarProps>) => {
       </Menu>
       <PreferencesMenu />
       <NotificationsMenu />
+      <a className={linkClassName} href="/knowledge">
+        <MenuItem>Knowledge</MenuItem>
+      </a>
     </Toolbar>
   );
 };

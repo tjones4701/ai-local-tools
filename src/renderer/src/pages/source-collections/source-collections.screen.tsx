@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardHeader, CardBody } from '@fluentui/react-components';
-import { rpcGeneric } from '../../lib/server';
+import { Card, CardHeader, CardPreview } from '@fluentui/react-components';
+import { useSourceCollections } from '@renderer/lib/data/source-collection.client';
+import React from 'react';
 
 const SourceCollectionsScreen: React.FC = () => {
-  const [sourceCollections, setSourceCollections] = useState([]);
+  const sourceCollections = useSourceCollections();
 
-  useEffect(() => {
-    const fetchSourceCollections = async () => {
-      try {
-        const data = await rpcGeneric('knowledge.getSourceCollections');
-        setSourceCollections(data);
-      } catch (error) {
-        console.error('Error fetching source collections:', error);
-      }
-    };
-
-    fetchSourceCollections();
-  }, []);
+  if (sourceCollections.loading) {
+    return <div>Loading...</div>;
+  }
+  if (sourceCollections.error) {
+    return <div>Error: {sourceCollections.error.message}</div>;
+  }
+  const items = sourceCollections?.value ?? [];
 
   return (
     <div>
-      {sourceCollections.map((collection) => (
+      {items.map((collection) => (
         <Card key={collection.id}>
           <CardHeader>{collection.name}</CardHeader>
-          <CardBody>{collection.description}</CardBody>
+          <CardPreview>{collection.description}</CardPreview>
         </Card>
       ))}
     </div>

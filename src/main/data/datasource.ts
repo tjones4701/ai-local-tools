@@ -1,4 +1,4 @@
-import { BaseEntity, DataSource } from 'typeorm';
+import { BaseEntity, DataSource, FindManyOptions } from 'typeorm';
 import { entities } from './entities';
 import { SnakeNamingStrategy } from './snack-naming.strategy';
 import { getDatabaseConfiguration, openDatabase } from './sqlite';
@@ -60,6 +60,17 @@ export async function getEntity<T = BaseEntity>(Entity: { new (): T }, id: any):
       id
     }
   })) as any;
+}
+
+export async function find<T = BaseEntity>(
+  Entity: { new (): T },
+  options: FindManyOptions<T> | undefined
+): Promise<any[]> {
+  const repository = await getRepository(Entity);
+  return await repository.find({
+    loadRelationIds: true,
+    ...(options as any)
+  });
 }
 
 export async function patchEntity<T = BaseEntity>(
