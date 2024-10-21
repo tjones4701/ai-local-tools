@@ -2,6 +2,8 @@ import { app } from 'electron';
 import { EventHandler } from '../event';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { getRepository } from '../data/datasource';
+import { SourceCollection } from '../data/entities/source-collection.entity';
 
 export const dataEvents: Record<string, EventHandler> = {};
 
@@ -54,5 +56,11 @@ export async function getData<T>(fileName: string, defaultValue: T): Promise<T> 
   }
 }
 
+export async function getSourceCollections() {
+  const repository = await getRepository(SourceCollection);
+  return repository.find();
+}
+
 dataEvents.getData = getData;
 dataEvents.saveData = saveData;
+dataEvents.getSourceCollections = getSourceCollections;

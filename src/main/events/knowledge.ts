@@ -1,6 +1,7 @@
 import { getRepository, saveEntity } from '../data/datasource';
 import { SourceCollection } from '../data/entities/source-collection.entity';
 import { Source } from '../data/entities/source.entity';
+import { getSourceCollections } from '../data/knowledge/source-collections';
 
 async function getTestSourceCollection() {
   const repository = await getRepository(SourceCollection);
@@ -46,5 +47,6 @@ async function knowledgeTest() {
 }
 
 export const knowledgeEvents = {
-  'knowledge.test': knowledgeTest
+  'knowledge.test': knowledgeTest,
+  'knowledge.getSourceCollections': getSourceCollections
 };
