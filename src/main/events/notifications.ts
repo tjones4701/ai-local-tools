@@ -5,7 +5,7 @@ export async function getNotifications(read: boolean | null) {
   const repository = await getRepository(Notification);
   let options: any = {
     order: {
-      createdAt: 'DESC'
+      created_at: 'DESC'
     }
   };
   if (read !== null) {

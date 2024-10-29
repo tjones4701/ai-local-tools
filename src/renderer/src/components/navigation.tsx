@@ -18,6 +18,10 @@ import * as React from 'react';
 const useStyles = makeStyles({
   linkClassName: {
     textDecoration: 'none'
+  },
+  navigationClassName: {
+    width: '100vw',
+    height: '50px'
   }
 });
 
@@ -57,15 +61,24 @@ export const PreferencesMenu: React.FC = () => {
   );
 };
 export const Navigation: React.FC = (props: Partial<ToolbarProps>) => {
-  const { linkClassName } = useStyles();
-  const routeElements = appRoutes.map((route) => (
-    <a className={linkClassName} href={route.href} key={route.href}>
-      <MenuItem>{route.label}</MenuItem>
-    </a>
-  ));
+  const { linkClassName, navigationClassName } = useStyles();
+  const routeElements = appRoutes
+    .map((route) => {
+      if (route.label) {
+        return (
+          <a className={linkClassName} href={route.href} key={route.href}>
+            <MenuItem>{route.label}</MenuItem>
+          </a>
+        );
+      }
+      return null;
+    })
+    .filter((item) => {
+      return item != null && React.isValidElement(item);
+    });
 
   return (
-    <Toolbar aria-label="Default" {...props}>
+    <Toolbar aria-label="Default" {...props} className={navigationClassName}>
       <Menu>
         <MenuTrigger>
           <ToolbarButton aria-label="More" icon={<MoreHorizontal24Filled />}>

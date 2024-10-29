@@ -1,4 +1,4 @@
-import { getRepository, saveEntity } from '../data/datasource';
+import { find, getEntity, getRepository, saveEntity, saveObject } from '../data/datasource';
 import { SourceCollection } from '../data/entities/source-collection.entity';
 import { Source } from '../data/entities/source.entity';
 import { getSourceCollections } from '../data/knowledge/source-collections';
@@ -18,28 +18,24 @@ async function getTestSourceCollection() {
 }
 
 async function getTestFileSource(collection: SourceCollection) {
-  const latestSource: Source = (await (
+  let latestSource: Source<{ filePath: string }> = (await (
     await getRepository(Source)
   ).findOne({
-    where: { id: 53 }
+    where: { source_collection_id: collection.id }
   })) as any;
   if (latestSource == null) {
     const source = new Source<{ filePath: string }>();
+    source.name = 'Test';
     source.metadata = { filePath: 'C:/temp/base' };
     source.source_type = 'FILE';
     source.source_collection = collection;
     source.source_collection_id = collection.id;
+    latestSource = await saveEntity(source);
   }
   if (latestSource.source_collection_id != collection.id) {
     latestSource.source_collection_id = collection.id;
     await saveEntity(latestSource);
     throw new Error('Source collection updated');
-  }
-  if (latestSource != null) {
-    await latestSource.process();
-    return latestSource;
-  } else {
-    throw new Error('No source found');
   }
 }
 
@@ -47,13 +43,40 @@ async function knowledgeTest() {
   try {
     const existingCollection = await getTestSourceCollection();
     await getTestFileSource(existingCollection);
-    console.log(existingCollection.name);
   } catch (e) {
     console.error(e);
   }
 }
 
+export async function processSource(sourceId: number) {
+  const source = await getEntity(Source, sourceId);
+  if (source == null) {
+    throw new Error('Source not found');
+  }
+  await source?.process();
+}
+
 export const knowledgeEvents = {
   'knowledge.test': knowledgeTest,
-  'knowledge.getSourceCollections': getSourceCollections
+  'knowledge.getSourceCollections': getSourceCollections,
+  'knowledge.saveSourceCollection': async (collection: SourceCollection) => {
+    return await saveObject(SourceCollection, collection);
+  },
+  'knowledge.saveSource': async (source: Source) => {
+    return await saveObject(Source, source);
+  },
+  'knowledge.getSources': async ({ collectionId }: { collectionId: number }) => {
+    return find(Source, { where: { source_collection_id: collectionId, active: true } });
+  },
+  'knowledge.getSource': async (sourceId: number) => {
+    return await getEntity(Source, sourceId);
+  },
+  'knowledge.search': async (collectionId: number, query: string, options: any) => {
+    const collection = await getEntity(SourceCollection, collectionId);
+    if (collection == null) {
+      throw new Error('Collection not found');
+    }
+    return await collection.getSimiliar(query, options);
+  },
+  'knowledge.processSource': processSource
 };

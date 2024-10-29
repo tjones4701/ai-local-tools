@@ -2,7 +2,6 @@ import { FluentProvider, webLightTheme, webDarkTheme } from '@fluentui/react-com
 import { AppRouter } from './app-router';
 import { DataProvider } from './hooks/save-data';
 import { useSettings } from './hooks/use-settings';
-import { useEffect } from 'react';
 import { rpcGeneric } from './lib/server';
 import { useDebounce } from 'react-use';
 

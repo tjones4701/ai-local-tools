@@ -7,7 +7,6 @@ function parseFileName(key: string): string {
 }
 
 async function originalSaveData<T>(key: string, value: T): Promise<boolean> {
-  console.log(key, value);
   key = parseFileName(key);
   return await rpc.saveData(key, value);
 }

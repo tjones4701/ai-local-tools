@@ -1,8 +1,20 @@
-import { Card, CardHeader, CardPreview } from '@fluentui/react-components';
 import { useSourceCollections } from '@renderer/lib/data/source-collection.client';
 import React from 'react';
+import { SourceCollectionCard } from './source-collection-card';
+import { Page } from '@renderer/components/page';
+import { makeStyles } from '@fluentui/react-components';
+import ContainerSection from '@renderer/components/container/ContainerSection';
+
+const useStyles = makeStyles({
+  cardsContainerClassName: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap'
+  }
+});
 
 const SourceCollectionsScreen: React.FC = () => {
+  const { cardsContainerClassName } = useStyles();
   const sourceCollections = useSourceCollections();
 
   if (sourceCollections.loading) {
@@ -14,14 +26,15 @@ const SourceCollectionsScreen: React.FC = () => {
   const items = sourceCollections?.value ?? [];
 
   return (
-    <div>
-      {items.map((collection) => (
-        <Card key={collection.id}>
-          <CardHeader>{collection.name}</CardHeader>
-          <CardPreview>{collection.description}</CardPreview>
-        </Card>
-      ))}
-    </div>
+    <Page label="Source Collections">
+      <ContainerSection>
+        <div className={cardsContainerClassName}>
+          {items.map((collection) => (
+            <SourceCollectionCard key={collection.id}>{collection}</SourceCollectionCard>
+          ))}
+        </div>
+      </ContainerSection>
+    </Page>
   );
 };
 

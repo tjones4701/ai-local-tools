@@ -1,12 +1,13 @@
-import { ISqlite, open } from 'sqlite';
+import { Database, ISqlite, open } from 'sqlite';
 import * as sqliteVec from 'sqlite-vec';
 import sqlite3 from 'sqlite3';
 import { getUserFilePath } from '../files';
 
 const filePath = getUserFilePath('database.db');
+console.log('Database path:', filePath);
 
-export async function loadExtensions(db: any) {
-  await db.loadExtension(sqliteVec.getLoadablePath());
+export async function loadExtensions(db: Database) {
+  await sqliteVec.load(db);
 }
 
 export function getDatabaseConfiguration(options: Partial<ISqlite.Config> = {}) {

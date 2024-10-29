@@ -1,11 +1,12 @@
+import { chunk } from 'llm-chunk';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { getData, getFiles } from '../../events/data';
+import { generateVectors } from '../../knowledge/embeddings/embedder';
 import { getLoader } from '../../knowledge/source-loader';
-import { createEntity, getEntity } from '../datasource';
+import { createEntity, deleteEntity, find, getEntity } from '../datasource';
 import { BaseEntity } from './base.entity';
 import { SourceCollection } from './source-collection.entity';
 import { SourcePart } from './source-part.entity';
-import { generateVectors } from '../../knowledge/embeddings/embedder';
 
 function splitStringByWords(text: string, words: number) {
   const splitters = [' ', '\\pagebreak'];
@@ -23,7 +24,7 @@ function splitStringByWords(text: string, words: number) {
 @Entity()
 export class Source<T = undefined> extends BaseEntity {
   @ManyToOne(() => SourceCollection, (sourceCollection) => sourceCollection.id)
-  source_collection!: SourceCollection;
+  source_collection!: SourceCollection<unknown>;
 
   @Column({ type: 'text' })
   name!: string;
@@ -43,6 +44,7 @@ export class Source<T = undefined> extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   tags!: string; // Changed from simple-array to text
 
+  @Column({ type: 'number' })
   source_collection_id!: number;
 
   public async process() {
@@ -63,18 +65,35 @@ export class Source<T = undefined> extends BaseEntity {
     await this.processParts();
   }
 
+  public async getSourceParts() {
+    return await find(SourcePart, {
+      where: {
+        source_id: this.id
+      }
+    });
+  }
+
   public async processParts() {
     const files = await this.getSourceFiles();
 
     const parts: SourcePart[] = [];
+    const idsToDelete = (await this.getSourceParts()).map((part) => part.id);
     for (const file of files) {
       const content = await getData<string>(file, '');
       if (content == '') {
         continue;
       }
 
-      const contentParts = splitStringByWords(content, 1000);
-      for (const part of contentParts) {
+      // Default options
+      const chunks = chunk(content, {
+        minLength: 7, // number of minimum characters into chunk
+        maxLength: 750, // number of maximum characters into chunk
+        splitter: 'paragraph', // paragraph | sentence
+        overlap: 50, // number of overlap chracters
+        delimiters: '' // regex for base split method
+      });
+
+      for (const part of chunks) {
         const sourcePart = new SourcePart();
         sourcePart.source_id = this.id;
         sourcePart.content = part;
@@ -82,6 +101,10 @@ export class Source<T = undefined> extends BaseEntity {
         const savedPart = await createEntity(SourcePart, sourcePart);
         parts.push(savedPart);
       }
+    }
+
+    for (const id of idsToDelete) {
+      await deleteEntity(SourcePart, id);
     }
   }
 
@@ -107,9 +130,6 @@ export class Source<T = undefined> extends BaseEntity {
   }
 
   async getFilesLocation() {
-    if (this.source_collection == null) {
-      throw new Error('Source collection not found');
-    }
     let filePath = `sources/${this.source_collection_id}/${this.id}`;
     return filePath;
   }

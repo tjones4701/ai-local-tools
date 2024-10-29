@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
-
 import { ValueTransformer } from 'typeorm';
 import { Source } from './source.entity.js';
 

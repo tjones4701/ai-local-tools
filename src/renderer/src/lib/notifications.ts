@@ -8,7 +8,7 @@ type Notification = {
   title: string;
   message: string;
   read: boolean;
-  createdAt: string;
+  created_at: string;
 };
 export const notifications = {
   read: async (id: string | any) => {

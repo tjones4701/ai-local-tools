@@ -1,23 +1,27 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PodcastScreen } from './pages/podcast/podcast.screen';
-import { HomeScreen } from './pages/home/home.screen';
-import { Navigation } from './components/navigation';
 import { makeStyles } from '@fluentui/react-components';
+import { isValidElement } from 'react';
+import { BrowserRouter, RouteObject, useParams, useRoutes } from 'react-router-dom';
+import { Navigation } from './components/navigation';
+import { HomeScreen } from './pages/home/home.screen';
+import { PodcastScreen } from './pages/podcast/podcast.screen';
 import { SettingsScreen } from './pages/settings/settings.screen';
+import { SourceCollectionView } from './pages/source-collections/source-collection-view';
 import SourceCollectionsScreen from './pages/source-collections/source-collections.screen';
+import { SourceView } from './pages/sources/source.screen';
+import { SourceCollectionSearchScreen } from './pages/source-collections/source-collection-search.screen';
+
+export type RouteElementProps = {
+  params: { [key: string]: string };
+};
+
+export type RouteElement = React.FC<RouteElementProps>;
 
 const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100vw',
-    minHeight: '100vh'
-  },
   inner: {
-    paddingTop: '10px',
-    paddingLeft: '20px',
-    paddingRight: '20px',
-    borderTop: '1px solid #e0e0e0'
+    borderTop: '1px solid #e0e0e0',
+    overflowY: 'auto',
+    maxHeight: 'calc(100vh - 50px)',
+    height: '100vh'
   }
 });
 
@@ -40,28 +44,77 @@ export const appRoutes = [
   {
     label: 'Source Collections',
     href: '/source-collections',
-    element: SourceCollectionsScreen
+    children: [
+      {
+        label: 'View',
+        href: '/',
+        element: SourceCollectionsScreen
+      },
+      {
+        label: 'Search',
+        href: '/source-collections/:id/search',
+        element: SourceCollectionSearchScreen
+      },
+      {
+        label: 'New',
+        href: ':id',
+        element: SourceCollectionView
+      }
+    ]
+  },
+  {
+    href: '/sources',
+    children: [
+      {
+        label: 'New',
+        href: ':id',
+        element: SourceView
+      }
+    ]
   }
 ];
 
+function RouteWrapper({ children }: any) {
+  const ChildElement = children;
+  let params = useParams();
+
+  return <ChildElement params={params} />;
+}
+
+function renderRouteElement(Element: any) {
+  if (Element != null && !isValidElement(Element)) {
+    Element = <RouteWrapper>{Element}</RouteWrapper>;
+  }
+
+  return Element;
+}
+
+function mapRoutes(routes): RouteObject[] {
+  return routes.map((route) => {
+    const isIndex = route.href == '/';
+    return {
+      index: route.href == '/',
+      path: !isIndex ? route.href : undefined,
+      element: renderRouteElement(route.element),
+      children: route.children ? mapRoutes(route.children) : undefined
+    };
+  });
+}
+
+function AppRouterInner(): JSX.Element {
+  const routes = mapRoutes(appRoutes);
+  let element = useRoutes(routes);
+  return <>{element}</>;
+}
+
 export function AppRouter(): JSX.Element {
-  const { root, inner } = useStyles();
+  const { inner } = useStyles();
   return (
-    <div className={root}>
+    <div>
       <Navigation />
       <div className={inner}>
         <BrowserRouter>
-          <Routes>
-            <Route path="/">
-              {appRoutes.map((route) => {
-                const Element = route.element;
-                if (route.href === '/') {
-                  return <Route key={route.href} index element={<HomeScreen />} />;
-                }
-                return <Route path={route.href} key={route.href} element={<Element />} />;
-              })}
-            </Route>
-          </Routes>
+          <AppRouterInner />
         </BrowserRouter>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { handleEvent } from './event';
+import { getEntity } from './data/datasource';
+import { SourceCollection } from './data/entities/source-collection.entity';
 
 function createWindow(): void {
   // Create the browser window.
