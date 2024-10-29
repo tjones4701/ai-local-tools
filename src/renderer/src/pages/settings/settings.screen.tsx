@@ -99,8 +99,6 @@ export const SettingsScreen = () => {
     setActiveTab(data.value as any);
   };
 
-  console.log(activeTab);
-
   return (
     <div className={styles.root}>
       <div>

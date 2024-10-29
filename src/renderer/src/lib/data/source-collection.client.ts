@@ -4,6 +4,7 @@ import { rpcGeneric } from '../server';
 import { AsyncState, useAsync } from '../use-async';
 import { ClientEntity } from './base-entity';
 import { ClientSource } from './source.client';
+import { ClientSourcePart } from './source-part.client';
 
 export type ClientSourceCollection = ClientEntity<{
   id: number;
@@ -23,10 +24,7 @@ export function getSourceCollections(): Promise<ClientSourceCollection[]> {
   return rpcGeneric('knowledge.getSourceCollections');
 }
 
-export function searchSourceCollection(
-  id: number,
-  content: string
-): Promise<ClientSourceCollection[]> {
+export function searchSourceCollection(id: number, content: string): Promise<ClientSourcePart[]> {
   return rpcGeneric('knowledge.search', id, content);
 }
 

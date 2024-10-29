@@ -52,7 +52,7 @@ export async function createTextToSpeech(text: string, voice: TextToSpeechVoice)
 }
 
 export const openaiEvents: Record<string, EventHandler> = {
-  createChatComplete: async (
+  'openai.createChatComplete': async (
     messages: ChatCompletionMessageParam | ChatCompletionMessageParam[]
   ) => {
     return await createChatCompletion(messages);

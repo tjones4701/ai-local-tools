@@ -9,6 +9,7 @@ import { SourceCollectionView } from './pages/source-collections/source-collecti
 import SourceCollectionsScreen from './pages/source-collections/source-collections.screen';
 import { SourceView } from './pages/sources/source.screen';
 import { SourceCollectionSearchScreen } from './pages/source-collections/source-collection-search.screen';
+import { SourceCollectionChat } from './pages/source-collections/source-collection-chat.screen';
 
 export type RouteElementProps = {
   params: { [key: string]: string };
@@ -54,6 +55,11 @@ export const appRoutes = [
         label: 'Search',
         href: '/source-collections/:id/search',
         element: SourceCollectionSearchScreen
+      },
+      {
+        label: 'Search',
+        href: '/source-collections/:id/chat',
+        element: SourceCollectionChat
       },
       {
         label: 'New',

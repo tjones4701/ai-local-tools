@@ -1,4 +1,4 @@
-export type SourcePart = {
+export type ClientSourcePart = {
   id: number;
   active: boolean;
   created_at: string;

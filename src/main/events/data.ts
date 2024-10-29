@@ -38,20 +38,26 @@ export async function saveData(key: string, data: any) {
     dataString = JSON.stringify(data);
   }
   await makeSureDirectoryExists(filePath);
-  await fs.writeFile(filePath, data);
+  await fs.writeFile(filePath, dataString);
   return filePath;
 }
 
 export async function getData<T>(fileName: string, defaultValue: T): Promise<T> {
-  const filePath = getDataFilePath(fileName);
+  let filePath = getDataFilePath(fileName);
+  let fileExtension = path.extname(filePath);
+  if (fileExtension == '') {
+    filePath = `${filePath}.json`;
+  }
   try {
     const fileData = await fs.readFile(filePath, 'utf-8');
-    if (fileName.endsWith('.json')) {
+    if (filePath.endsWith('.json')) {
+      console.log('HERE');
       return JSON.parse(fileData) ?? defaultValue;
     } else {
       return (fileData as unknown as T) ?? defaultValue;
     }
   } catch (error) {
+    console.warn(error);
     return defaultValue;
   }
 }

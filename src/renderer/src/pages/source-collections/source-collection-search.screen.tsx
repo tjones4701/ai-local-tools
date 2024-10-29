@@ -7,7 +7,7 @@ import {
   searchSourceCollection,
   useSourceCollection
 } from '@renderer/lib/data/source-collection.client';
-import { SourcePart } from '@renderer/lib/data/source-part.client';
+import { ClientSourcePart } from '@renderer/lib/data/source-part.client';
 import FeInput from '@renderer/quick-form/inputs/fe-input';
 import QuickForm from '@renderer/quick-form/QuickForm';
 import { useState } from 'react';
@@ -43,7 +43,7 @@ function Screen({ children }: { children: ClientSourceCollection }) {
   );
 }
 
-function SourchCollectionPartCard({ children }: { children: SourcePart }) {
+function SourchCollectionPartCard({ children }: { children: ClientSourcePart }) {
   return (
     <Card>
       <div>{children.content}</div>

@@ -47,6 +47,7 @@ export const SourceCollectionCard = ({ children }: { children: ClientSourceColle
       <footer className={mergeClasses(flex, cardFooter)}>
         <Button href={`/source-collections/${children.id}`}>View</Button>
         <Button href={`/source-collections/${children.id}/search`}>Search</Button>
+        <Button href={`/source-collections/${children.id}/chat`}>Chat</Button>
       </footer>
     </Card>
   );
