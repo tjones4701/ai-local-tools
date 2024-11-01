@@ -1,10 +1,13 @@
 import { RouteElement } from '@renderer/app-router';
+import ContainerHeader from '@renderer/components/container/ContainerHeader';
 import ContainerSection from '@renderer/components/container/ContainerSection';
 import Detail from '@renderer/components/detail';
 import { Page } from '@renderer/components/page';
 import { ClientSource, useSource } from '@renderer/lib/data/source.client';
 import FEInput from '@renderer/quick-form/inputs/fe-input';
 import QuickForm from '@renderer/quick-form/QuickForm';
+import { SourceCards } from '../source-collections/source-cards';
+import { SourcePartCards } from './source-part-cards';
 
 export const SourceView: RouteElement = ({ params }) => {
   const sourceData = useSource(params?.id);
@@ -38,6 +41,17 @@ export const SourceView: RouteElement = ({ params }) => {
             {source.modified_at}
           </Detail>
         </QuickForm>
+      </ContainerSection>
+      <ContainerHeader>Child Sources</ContainerHeader>
+      <ContainerSection>
+        {source.source_collection_id != null && (
+          <SourceCards collectionId={source.source_collection_id} parentId={source.id} />
+        )}
+      </ContainerSection>
+
+      <ContainerHeader>Source Parts</ContainerHeader>
+      <ContainerSection>
+        {source.source_collection_id != null && <SourcePartCards sourceId={source.id} />}
       </ContainerSection>
     </Page>
   );

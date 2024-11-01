@@ -1,5 +1,6 @@
 import { find, getEntity, getRepository, saveEntity, saveObject } from '../data/datasource';
 import { SourceCollection } from '../data/entities/source-collection.entity';
+import { SourcePart } from '../data/entities/source-part.entity';
 import { Source } from '../data/entities/source.entity';
 import { getSourceCollections } from '../data/knowledge/source-collections';
 
@@ -70,6 +71,12 @@ export const knowledgeEvents = {
   },
   'knowledge.getSource': async (sourceId: number) => {
     return await getEntity(Source, sourceId);
+  },
+  'knowledge.getSourceParts': async ({ sourceId }: { sourceId: number }) => {
+    return find(SourcePart, { where: { source_id: sourceId, active: true } });
+  },
+  'knowledge.getSourcePart': async (id: number) => {
+    return await getEntity(SourcePart, id);
   },
   'knowledge.search': async (collectionId: number, query: string, options: any) => {
     const collection = await getEntity(SourceCollection, collectionId);

@@ -26,6 +26,9 @@ export class Source<T = undefined> extends BaseEntity {
   @ManyToOne(() => SourceCollection, (sourceCollection) => sourceCollection.id)
   source_collection!: SourceCollection<unknown>;
 
+  @ManyToOne(() => Source, (source) => source.id, { nullable: true })
+  parent_source!: Source<unknown> | null;
+
   @Column({ type: 'text' })
   name!: string;
 
@@ -46,6 +49,9 @@ export class Source<T = undefined> extends BaseEntity {
 
   @Column({ type: 'number' })
   source_collection_id!: number;
+
+  @Column({ type: 'number', nullable: true })
+  parent_source_id!: number;
 
   public async process() {
     if (this.id == null) {

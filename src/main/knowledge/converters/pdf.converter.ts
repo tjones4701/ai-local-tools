@@ -4,6 +4,8 @@ import { replaceString } from '../../lib/replace-string';
 import type Pdfparser from 'pdf2json';
 import type { Output as PdfDocument } from 'pdf2json';
 import { cleanString } from '../../lib/clean-string';
+
+process.env.PDF2JSON_DISABLE_LOGS = '1';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PDFParser = require('pdf2json');
 export class PdfFileLoader {

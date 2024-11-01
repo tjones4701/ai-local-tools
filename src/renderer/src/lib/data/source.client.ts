@@ -13,6 +13,8 @@ export type ClientSource = ClientEntity<{
   sourceType: string;
   metadata: Record<any, any>;
   source_collection_id?: number;
+  parent_source_id?: number;
+  parent_source: ClientSource;
   tags: string;
 }>;
 

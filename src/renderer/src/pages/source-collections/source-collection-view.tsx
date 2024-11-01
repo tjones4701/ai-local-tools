@@ -12,6 +12,7 @@ import { useSources } from '@renderer/lib/data/source.client';
 import FEInput from '@renderer/quick-form/inputs/fe-input';
 import QuickForm from '@renderer/quick-form/QuickForm';
 import { SourceCard } from './source-card';
+import { SourceCards } from './source-cards';
 
 export const SourceCollectionView: RouteElement = ({ params }) => {
   const collectionData = useSourceCollection(params?.id);
@@ -53,32 +54,8 @@ export const SourceCollectionView: RouteElement = ({ params }) => {
       </ContainerSection>
       <ContainerHeader>Sources</ContainerHeader>
       <ContainerSection>
-        <SourceCards>{collection.id}</SourceCards>
+        <SourceCards collectionId={collection.id} />
       </ContainerSection>
     </Page>
-  );
-};
-
-const useSourceCardStyles = makeStyles({
-  root: {
-    display: 'flex',
-    gap: '8px',
-    flexWrap: 'wrap'
-  }
-});
-const SourceCards = ({ children }: { children: number }) => {
-  const { root } = useSourceCardStyles();
-  const sourcesData = useSources({ collectionId: children });
-  const sources = sourcesData.value ?? [];
-
-  if (sourcesData.loading) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div className={root}>
-      {sources.map((card) => {
-        return <SourceCard key={card.id}>{card}</SourceCard>;
-      })}
-    </div>
   );
 };

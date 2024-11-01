@@ -15,8 +15,13 @@ export const getDataFilePath = (fileName: string) => {
   return path.join(userDataPath, `${fileName}`);
 };
 
-export function getFiles(folderPath: string) {
-  return fs.readdir(getDataFilePath(folderPath));
+export async function getFiles(folderPath: string) {
+  try {
+    const filePath = getDataFilePath(folderPath);
+    return await fs.readdir(filePath);
+  } catch (e) {
+    return [];
+  }
 }
 
 async function makeSureDirectoryExists(filePath: string) {
@@ -51,7 +56,6 @@ export async function getData<T>(fileName: string, defaultValue: T): Promise<T> 
   try {
     const fileData = await fs.readFile(filePath, 'utf-8');
     if (filePath.endsWith('.json')) {
-      console.log('HERE');
       return JSON.parse(fileData) ?? defaultValue;
     } else {
       return (fileData as unknown as T) ?? defaultValue;
