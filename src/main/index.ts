@@ -1,11 +1,10 @@
 import 'reflect-metadata';
-import { app, shell, BrowserWindow, ipcMain } from 'electron';
+import { app, shell, BrowserWindow, ipcMain, net, protocol } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { handleEvent } from './event';
-import { getEntity } from './data/datasource';
-import { SourceCollection } from './data/entities/source-collection.entity';
+import { startServer } from './api';
 
 function createWindow(): void {
   // Create the browser window.
@@ -43,6 +42,7 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  startServer();
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
 

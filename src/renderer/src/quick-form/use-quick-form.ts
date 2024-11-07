@@ -7,8 +7,8 @@ export const QuickFormContext = React.createContext<any>(null);
 
 export type IQuickFormContext = UseFormReturn & {
   getValue: (key: string) => any;
-  setValue?: (key: string, value: any) => void;
-  setValues?: (data: { [key: string]: any }) => void;
+  setValue: (key: string, value: any) => void;
+  setValues: (data: { [key: string]: any }) => void;
   disabled: boolean;
   loading: boolean;
   readOnly: boolean;

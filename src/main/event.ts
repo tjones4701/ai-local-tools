@@ -4,6 +4,7 @@ import { notificationEvents } from './events/notifications';
 import { openaiEvents } from './events/openai';
 import { randomEvents } from './events/random';
 import { nodeLlamaCppEvents } from './events/node-llama-cpp';
+import { transformerEvents } from './events/transformer';
 
 export type EventHandler = (...args: any) => Promise<any>;
 
@@ -24,7 +25,8 @@ const events = {
   ...openaiEvents,
   ...notificationEvents,
   ...knowledgeEvents,
-  ...nodeLlamaCppEvents
+  ...nodeLlamaCppEvents,
+  ...transformerEvents
 };
 
 export async function handleEvent(eventPayload: EventPayload) {

@@ -10,6 +10,7 @@ import SourceCollectionsScreen from './pages/source-collections/source-collectio
 import { SourceView } from './pages/sources/source.screen';
 import { SourceCollectionSearchScreen } from './pages/source-collections/source-collection-search.screen';
 import { SourceCollectionChat } from './pages/source-collections/source-collection-chat.screen';
+import { TestScreen } from '@renderer/pages/test/test';
 
 export type RouteElementProps = {
   params: { [key: string]: string };
@@ -67,6 +68,11 @@ export const appRoutes = [
         element: SourceCollectionView
       }
     ]
+  },
+  {
+    label: 'Test',
+    href: '/test',
+    element: TestScreen
   },
   {
     href: '/sources',
